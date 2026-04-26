@@ -1,5 +1,6 @@
 using CompanyStructure.Application;
 using CompanyStructure.Infrastructure;
+using Scalar.AspNetCore;
 
 namespace CompanyStructure.Api
 {
@@ -20,8 +21,8 @@ namespace CompanyStructure.Api
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.MapSwagger("/openapi/{documentName}.json");
+                app.MapScalarApiReference();
             }
 
             app.UseHttpsRedirection();
