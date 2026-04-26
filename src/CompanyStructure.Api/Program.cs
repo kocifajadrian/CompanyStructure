@@ -1,3 +1,4 @@
+using CompanyStructure.Application;
 using CompanyStructure.Infrastructure;
 
 namespace CompanyStructure.Api
@@ -11,6 +12,8 @@ namespace CompanyStructure.Api
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
 
             var app = builder.Build();
