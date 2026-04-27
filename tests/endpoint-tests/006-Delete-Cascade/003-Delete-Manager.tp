@@ -2,7 +2,7 @@
 
 --- HTTP
 ## TEST-EXPECT-STATUS: [204]
-DELETE {{ApiBaseUrl}}{{EmployeesSection}}/{{ManagerEmployeeId}}
+DELETE {{ApiBaseUrl}}{{EmployeesSection}}/{{ManagerId}}
 
 --- END
 
@@ -11,6 +11,6 @@ DELETE {{ApiBaseUrl}}{{EmployeesSection}}/{{ManagerEmployeeId}}
 
 --- HTTP
 ## TEST-EXPECT-STATUS: [404]
-GET {{ApiBaseUrl}}{{EmployeesSection}}/{{ManagerEmployeeId}}
+GET {{ApiBaseUrl}}{{EmployeesSection}}/{{ManagerId}}
 
 --- END
