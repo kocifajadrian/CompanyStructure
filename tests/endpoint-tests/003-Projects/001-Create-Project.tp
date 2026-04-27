@@ -1,0 +1,111 @@
+--- TESTCASE Create Project - Success - 201 Created
+
+--- HTTP
+## TEST-EXPECT-STATUS: [201]
+## TEST-HAS-BODY
+POST {{ApiBaseUrl}}{{ProjectsSection}}
+Content-Type: application/json
+
+{
+  "name": "Application",
+  "code": "APP",
+  "divisionId": "{{DivisionId}}",
+  "managerId": null
+}
+
+--- TEST
+await tp.Test("Response should contain generated identifier and match request data.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Application", (string)body.name);
+    Equal("APP", (string)body.code);
+    Equal(tp.GetVariable<string>("DivisionId", "divisions"), (string)body.divisionId);
+    Null(body.managerId);
+
+    tp.SetVariable("ProjectId", (string)body.id, "projects");
+});
+
+--- END
+
+
+--- TESTCASE Create Project - Empty Name - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{ProjectsSection}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "code": "APP",
+  "divisionId": "{{DivisionId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Project - Empty Code - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{ProjectsSection}}
+Content-Type: application/json
+
+{
+  "name": "Application",
+  "code": "",
+  "divisionId": "{{DivisionId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Project - Empty DivisionId - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{ProjectsSection}}
+Content-Type: application/json
+
+{
+  "name": "Application",
+  "code": "APP",
+  "divisionId": "00000000-0000-0000-0000-000000000000"
+}
+
+--- END
+
+
+--- TESTCASE Create Project - Nonexistent Division - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+POST {{ApiBaseUrl}}{{ProjectsSection}}
+Content-Type: application/json
+
+{
+  "name": "Application",
+  "code": "APP",
+  "divisionId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END
+
+
+--- TESTCASE Create Project - Invalid Manager - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+POST {{ApiBaseUrl}}{{ProjectsSection}}
+Content-Type: application/json
+
+{
+  "name": "Application",
+  "code": "APP",
+  "divisionId": "{{DivisionId}}",
+  "managerId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END

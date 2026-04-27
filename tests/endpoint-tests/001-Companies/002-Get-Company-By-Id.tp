@@ -1,0 +1,28 @@
+--- TESTCASE Get Company By Id - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{CompaniesSection}}/{{CompanyId}}
+
+--- TEST
+await tp.Test("Response should match the previously created company.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Software Company", (string)body.name);
+    Equal("SWCOMP", (string)body.code);
+    Null(body.managerId);
+});
+
+--- END
+
+
+--- TESTCASE Get Company By Id - Nonexistent Company - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{CompaniesSection}}/00000000-0000-0000-0000-000000000001
+
+--- END

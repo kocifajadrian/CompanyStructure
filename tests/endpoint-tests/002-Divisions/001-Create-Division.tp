@@ -1,0 +1,111 @@
+--- TESTCASE Create Division - Success - 201 Created
+
+--- HTTP
+## TEST-EXPECT-STATUS: [201]
+## TEST-HAS-BODY
+POST {{ApiBaseUrl}}{{DivisionsSection}}
+Content-Type: application/json
+
+{
+  "name": "Software Development",
+  "code": "SWDEV",
+  "companyId": "{{CompanyId}}",
+  "managerId": null
+}
+
+--- TEST
+await tp.Test("Response should contain generated identifier and match request data.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Software Development", (string)body.name);
+    Equal("SWDEV", (string)body.code);
+    Equal(tp.GetVariable<string>("CompanyId", "companies"), (string)body.companyId);
+    Null(body.managerId);
+
+    tp.SetVariable("DivisionId", (string)body.id, "divisions");
+});
+
+--- END
+
+
+--- TESTCASE Create Division - Empty Name - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{DivisionsSection}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "code": "SWDEV",
+  "companyId": "{{CompanyId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Division - Empty Code - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{DivisionsSection}}
+Content-Type: application/json
+
+{
+  "name": "Software Development",
+  "code": "",
+  "companyId": "{{CompanyId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Division - Empty CompanyId - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{DivisionsSection}}
+Content-Type: application/json
+
+{
+  "name": "Software Development",
+  "code": "SWDEV",
+  "companyId": "00000000-0000-0000-0000-000000000000"
+}
+
+--- END
+
+
+--- TESTCASE Create Division - Nonexistent Company - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+POST {{ApiBaseUrl}}{{DivisionsSection}}
+Content-Type: application/json
+
+{
+  "name": "Software Development",
+  "code": "SWDEV",
+  "companyId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END
+
+
+--- TESTCASE Create Division - Invalid Manager - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+POST {{ApiBaseUrl}}{{DivisionsSection}}
+Content-Type: application/json
+
+{
+  "name": "Software Development",
+  "code": "SWDEV",
+  "companyId": "{{CompanyId}}",
+  "managerId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END

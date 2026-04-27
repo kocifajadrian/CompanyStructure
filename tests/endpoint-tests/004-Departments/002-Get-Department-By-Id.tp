@@ -1,0 +1,29 @@
+--- TESTCASE Get Department By Id - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+
+--- TEST
+await tp.Test("Response should match the previously created department.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Backend", (string)body.name);
+    Equal("BE", (string)body.code);
+    Equal(tp.GetVariable<string>("ProjectId", "projects"), (string)body.projectId);
+    Null(body.managerId);
+});
+
+--- END
+
+
+--- TESTCASE Get Department By Id - Nonexistent Department - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{DepartmentsSection}}/00000000-0000-0000-0000-000000000001
+
+--- END

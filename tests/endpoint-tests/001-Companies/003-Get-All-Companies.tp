@@ -1,0 +1,20 @@
+--- TESTCASE Get All Companies - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{CompaniesSection}}
+
+--- TEST
+await tp.Test("Response should contain the previously created company.", async () =>
+{
+    var json = await tp.Response.Content.ReadAsStringAsync();
+    var companies = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(json);
+
+    NotNull(companies);
+    dynamic first = companies[0];
+    Equal("Software Company", (string)first.name);
+    Equal("SWCOMP", (string)first.code);
+});
+
+--- END

@@ -1,0 +1,115 @@
+--- TESTCASE Create Employee - Success - 201 Created
+
+--- HTTP
+## TEST-EXPECT-STATUS: [201]
+## TEST-HAS-BODY
+POST {{ApiBaseUrl}}{{EmployeesSection}}
+Content-Type: application/json
+
+{
+  "title": "Ing.",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+421 123 456 789",
+  "email": "john.doe@example.com",
+  "companyId": "{{CompanyId}}"
+}
+
+--- TEST
+await tp.Test("Response should contain generated identifier and match request data.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Ing.", (string)body.title);
+    Equal("John", (string)body.firstName);
+    Equal("Doe", (string)body.lastName);
+    Equal("+421 123 456 789", (string)body.phone);
+    Equal("john.doe@example.com", (string)body.email);
+    Equal(tp.GetVariable<string>("CompanyId", "companies"), (string)body.companyId);
+
+    tp.SetVariable("EmployeeId", (string)body.id, "employees");
+});
+
+--- END
+
+
+--- TESTCASE Create Employee - Empty FirstName - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{EmployeesSection}}
+Content-Type: application/json
+
+{
+  "firstName": "",
+  "lastName": "Doe",
+  "companyId": "{{CompanyId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Employee - Empty LastName - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{EmployeesSection}}
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "",
+  "companyId": "{{CompanyId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Employee - Invalid Email - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{EmployeesSection}}
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "not-an-email",
+  "companyId": "{{CompanyId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Employee - Empty CompanyId - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{EmployeesSection}}
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "companyId": "00000000-0000-0000-0000-000000000000"
+}
+
+--- END
+
+
+--- TESTCASE Create Employee - Nonexistent Company - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+POST {{ApiBaseUrl}}{{EmployeesSection}}
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "companyId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END

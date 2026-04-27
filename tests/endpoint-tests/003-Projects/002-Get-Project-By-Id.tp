@@ -1,0 +1,29 @@
+--- TESTCASE Get Project By Id - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{ProjectsSection}}/{{ProjectId}}
+
+--- TEST
+await tp.Test("Response should match the previously created project.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Application", (string)body.name);
+    Equal("APP", (string)body.code);
+    Equal(tp.GetVariable<string>("DivisionId", "divisions"), (string)body.divisionId);
+    Null(body.managerId);
+});
+
+--- END
+
+
+--- TESTCASE Get Project By Id - Nonexistent Project - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{ProjectsSection}}/00000000-0000-0000-0000-000000000001
+
+--- END

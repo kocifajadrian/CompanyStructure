@@ -1,0 +1,29 @@
+--- TESTCASE Get All Departments By Project - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{DepartmentsSection}}/by-project/{{ProjectId}}
+
+--- TEST
+await tp.Test("Response should contain the previously created department.", async () =>
+{
+    var json = await tp.Response.Content.ReadAsStringAsync();
+    var departments = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(json);
+
+    NotNull(departments);
+    dynamic first = departments[0];
+    Equal("Backend", (string)first.name);
+    Equal("BE", (string)first.code);
+});
+
+--- END
+
+
+--- TESTCASE Get All Departments By Project - Nonexistent Project - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{DepartmentsSection}}/by-project/00000000-0000-0000-0000-000000000001
+
+--- END

@@ -1,0 +1,93 @@
+--- TESTCASE Update Department - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+PUT {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+Content-Type: application/json
+
+{
+  "name": "Frontend",
+  "code": "FE",
+  "managerId": null
+}
+
+--- END
+
+
+--- TESTCASE Update Department - Verify Changes - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+
+--- TEST
+await tp.Test("Department should reflect updated values.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    Equal("Frontend", (string)body.name);
+    Equal("FE", (string)body.code);
+});
+
+--- END
+
+
+--- TESTCASE Update Department - Nonexistent Department - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+PUT {{ApiBaseUrl}}{{DepartmentsSection}}/00000000-0000-0000-0000-000000000001
+Content-Type: application/json
+
+{
+  "name": "Frontend",
+  "code": "FE"
+}
+
+--- END
+
+
+--- TESTCASE Update Department - Empty Name - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+PUT {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "code": "FE"
+}
+
+--- END
+
+
+--- TESTCASE Update Department - Empty Code - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+PUT {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+Content-Type: application/json
+
+{
+  "name": "Frontend",
+  "code": ""
+}
+
+--- END
+
+
+--- TESTCASE Update Department - Invalid Manager - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+PUT {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+Content-Type: application/json
+
+{
+  "name": "Frontend",
+  "code": "FE",
+  "managerId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END

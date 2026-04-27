@@ -1,0 +1,28 @@
+--- TESTCASE Create Manager - Success - 201 Created
+
+--- HTTP
+## TEST-EXPECT-STATUS: [201]
+## TEST-HAS-BODY
+POST {{ApiBaseUrl}}{{EmployeesSection}}
+Content-Type: application/json
+
+{
+  "title": "Ing.",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+421 123 456 789",
+  "email": "john.doe@example.com",
+  "companyId": "{{CompanyId}}"
+}
+
+--- TEST
+await tp.Test("Manager should be created successfully.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+
+    tp.SetVariable("ManagerId", (string)body.id, "cascade");
+});
+
+--- END

@@ -1,0 +1,111 @@
+--- TESTCASE Create Department - Success - 201 Created
+
+--- HTTP
+## TEST-EXPECT-STATUS: [201]
+## TEST-HAS-BODY
+POST {{ApiBaseUrl}}{{DepartmentsSection}}
+Content-Type: application/json
+
+{
+  "name": "Backend",
+  "code": "BE",
+  "projectId": "{{ProjectId}}",
+  "managerId": null
+}
+
+--- TEST
+await tp.Test("Response should contain generated identifier and match request data.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Backend", (string)body.name);
+    Equal("BE", (string)body.code);
+    Equal(tp.GetVariable<string>("ProjectId", "projects"), (string)body.projectId);
+    Null(body.managerId);
+
+    tp.SetVariable("DepartmentId", (string)body.id, "departments");
+});
+
+--- END
+
+
+--- TESTCASE Create Department - Empty Name - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{DepartmentsSection}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "code": "BE",
+  "projectId": "{{ProjectId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Department - Empty Code - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{DepartmentsSection}}
+Content-Type: application/json
+
+{
+  "name": "Backend",
+  "code": "",
+  "projectId": "{{ProjectId}}"
+}
+
+--- END
+
+
+--- TESTCASE Create Department - Empty ProjectId - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{DepartmentsSection}}
+Content-Type: application/json
+
+{
+  "name": "Backend",
+  "code": "BE",
+  "projectId": "00000000-0000-0000-0000-000000000000"
+}
+
+--- END
+
+
+--- TESTCASE Create Department - Nonexistent Project - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+POST {{ApiBaseUrl}}{{DepartmentsSection}}
+Content-Type: application/json
+
+{
+  "name": "Backend",
+  "code": "BE",
+  "projectId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END
+
+
+--- TESTCASE Create Department - Invalid Manager - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+POST {{ApiBaseUrl}}{{DepartmentsSection}}
+Content-Type: application/json
+
+{
+  "name": "Backend",
+  "code": "BE",
+  "projectId": "{{ProjectId}}",
+  "managerId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END

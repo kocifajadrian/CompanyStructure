@@ -1,0 +1,29 @@
+--- TESTCASE Get All Projects By Division - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{ProjectsSection}}/by-division/{{DivisionId}}
+
+--- TEST
+await tp.Test("Response should contain the previously created project.", async () =>
+{
+    var json = await tp.Response.Content.ReadAsStringAsync();
+    var projects = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(json);
+
+    NotNull(projects);
+    dynamic first = projects[0];
+    Equal("Application", (string)first.name);
+    Equal("APP", (string)first.code);
+});
+
+--- END
+
+
+--- TESTCASE Get All Projects By Division - Nonexistent Division - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{ProjectsSection}}/by-division/00000000-0000-0000-0000-000000000001
+
+--- END

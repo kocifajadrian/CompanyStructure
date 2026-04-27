@@ -1,0 +1,93 @@
+--- TESTCASE Update Division - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+PUT {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+Content-Type: application/json
+
+{
+  "name": "Hardware Development",
+  "code": "HWDEV",
+  "managerId": null
+}
+
+--- END
+
+
+--- TESTCASE Update Division - Verify Changes - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+
+--- TEST
+await tp.Test("Division should reflect updated values.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    Equal("Hardware Development", (string)body.name);
+    Equal("HWDEV", (string)body.code);
+});
+
+--- END
+
+
+--- TESTCASE Update Division - Nonexistent Division - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+PUT {{ApiBaseUrl}}{{DivisionsSection}}/00000000-0000-0000-0000-000000000001
+Content-Type: application/json
+
+{
+  "name": "Hardware Development",
+  "code": "HWDEV"
+}
+
+--- END
+
+
+--- TESTCASE Update Division - Empty Name - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+PUT {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "code": "HWDEV"
+}
+
+--- END
+
+
+--- TESTCASE Update Division - Empty Code - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+PUT {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+Content-Type: application/json
+
+{
+  "name": "Hardware Development",
+  "code": ""
+}
+
+--- END
+
+
+--- TESTCASE Update Division - Invalid Manager - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+PUT {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+Content-Type: application/json
+
+{
+  "name": "Hardware Development",
+  "code": "HWDEV",
+  "managerId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END

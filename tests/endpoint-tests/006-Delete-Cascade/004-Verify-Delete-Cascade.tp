@@ -1,0 +1,66 @@
+--- TESTCASE Verify Company ManagerId Is Null - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{CompaniesSection}}/{{CompanyId}}
+
+--- TEST
+await tp.Test("Company managerId should be null after manager was deleted.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    Null(body.managerId);
+});
+
+--- END
+
+
+--- TESTCASE Verify Division ManagerId Is Null - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+
+--- TEST
+await tp.Test("Division managerId should be null after manager was deleted.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    Null(body.managerId);
+});
+
+--- END
+
+
+--- TESTCASE Verify Project ManagerId Is Null - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{ProjectsSection}}/{{ProjectId}}
+
+--- TEST
+await tp.Test("Project managerId should be null after manager was deleted.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    Null(body.managerId);
+});
+
+--- END
+
+
+--- TESTCASE Verify Department ManagerId Is Null - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+
+--- TEST
+await tp.Test("Department managerId should be null after manager was deleted.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    Null(body.managerId);
+});
+
+--- END

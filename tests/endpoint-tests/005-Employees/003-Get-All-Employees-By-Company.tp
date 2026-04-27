@@ -1,0 +1,29 @@
+--- TESTCASE Get All Employees By Company - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{EmployeesSection}}/by-company/{{CompanyId}}
+
+--- TEST
+await tp.Test("Response should contain the previously created employee.", async () =>
+{
+    var json = await tp.Response.Content.ReadAsStringAsync();
+    var employees = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(json);
+
+    NotNull(employees);
+    dynamic first = employees[0];
+    Equal("John", (string)first.firstName);
+    Equal("Doe", (string)first.lastName);
+});
+
+--- END
+
+
+--- TESTCASE Get All Employees By Company - Nonexistent Company - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{EmployeesSection}}/by-company/00000000-0000-0000-0000-000000000001
+
+--- END

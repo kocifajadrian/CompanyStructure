@@ -1,0 +1,79 @@
+--- TESTCASE Delete Company With Existing Divisions - Conflict - 409
+
+--- HTTP
+## TEST-EXPECT-STATUS: [409]
+DELETE {{ApiBaseUrl}}{{CompaniesSection}}/{{CompanyId}}
+
+--- END
+
+
+--- TESTCASE Delete Division With Existing Projects - Conflict - 409
+
+--- HTTP
+## TEST-EXPECT-STATUS: [409]
+DELETE {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+
+--- END
+
+
+--- TESTCASE Delete Project With Existing Departments - Conflict - 409
+
+--- HTTP
+## TEST-EXPECT-STATUS: [409]
+DELETE {{ApiBaseUrl}}{{ProjectsSection}}/{{ProjectId}}
+
+--- END
+
+
+--- TESTCASE Delete Department - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+DELETE {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+
+--- END
+
+
+--- TESTCASE Delete Project - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+DELETE {{ApiBaseUrl}}{{ProjectsSection}}/{{ProjectId}}
+
+--- END
+
+
+--- TESTCASE Delete Division - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+DELETE {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+
+--- END
+
+
+--- TESTCASE Delete Company With Existing Employees - Conflict - 409
+
+--- HTTP
+## TEST-EXPECT-STATUS: [409]
+DELETE {{ApiBaseUrl}}{{CompaniesSection}}/{{CompanyId}}
+
+--- END
+
+
+--- TESTCASE Delete Employee - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+DELETE {{ApiBaseUrl}}{{EmployeesSection}}/{{EmployeeId}}
+
+--- END
+
+
+--- TESTCASE Delete Company - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+DELETE {{ApiBaseUrl}}{{CompaniesSection}}/{{CompanyId}}
+
+--- END

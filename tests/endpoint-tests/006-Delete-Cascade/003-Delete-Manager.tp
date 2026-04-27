@@ -1,0 +1,16 @@
+--- TESTCASE Delete Manager Employee - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+DELETE {{ApiBaseUrl}}{{EmployeesSection}}/{{ManagerEmployeeId}}
+
+--- END
+
+
+--- TESTCASE Verify Manager Employee Is Deleted - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{EmployeesSection}}/{{ManagerEmployeeId}}
+
+--- END

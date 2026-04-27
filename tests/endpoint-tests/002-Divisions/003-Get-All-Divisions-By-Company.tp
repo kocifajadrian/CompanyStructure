@@ -1,0 +1,29 @@
+--- TESTCASE Get All Divisions By Company - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{DivisionsSection}}/by-company/{{CompanyId}}
+
+--- TEST
+await tp.Test("Response should contain the previously created division.", async () =>
+{
+    var json = await tp.Response.Content.ReadAsStringAsync();
+    var divisions = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dynamic>>(json);
+
+    NotNull(divisions);
+    dynamic first = divisions[0];
+    Equal("Software Development", (string)first.name);
+    Equal("SWDEV", (string)first.code);
+});
+
+--- END
+
+
+--- TESTCASE Get All Divisions By Company - Nonexistent Company - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{DivisionsSection}}/by-company/00000000-0000-0000-0000-000000000001
+
+--- END

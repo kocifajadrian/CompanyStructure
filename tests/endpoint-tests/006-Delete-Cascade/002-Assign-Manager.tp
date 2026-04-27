@@ -1,0 +1,62 @@
+--- TESTCASE Assign Manager To Company - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+PUT {{ApiBaseUrl}}{{CompaniesSection}}/{{CompanyId}}
+Content-Type: application/json
+
+{
+  "name": "Hardware Company",
+  "code": "HWCOMP",
+  "managerId": "{{ManagerId}}"
+}
+
+--- END
+
+
+--- TESTCASE Assign Manager To Division - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+PUT {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+Content-Type: application/json
+
+{
+  "name": "Hardware Development",
+  "code": "HWDEV",
+  "managerId": "{{ManagerId}}"
+}
+
+--- END
+
+
+--- TESTCASE Assign Manager To Project - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+PUT {{ApiBaseUrl}}{{ProjectsSection}}/{{ProjectId}}
+Content-Type: application/json
+
+{
+  "name": "Website",
+  "code": "WEB",
+  "managerId": "{{ManagerId}}"
+}
+
+--- END
+
+
+--- TESTCASE Assign Manager To Department - Success - 204 No Content
+
+--- HTTP
+## TEST-EXPECT-STATUS: [204]
+PUT {{ApiBaseUrl}}{{DepartmentsSection}}/{{DepartmentId}}
+Content-Type: application/json
+
+{
+  "name": "Frontend",
+  "code": "FE",
+  "managerId": "{{ManagerId}}"
+}
+
+--- END

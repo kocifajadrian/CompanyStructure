@@ -1,0 +1,74 @@
+--- TESTCASE Create Company - Success - 201 Created
+
+--- HTTP
+## TEST-EXPECT-STATUS: [201]
+## TEST-HAS-BODY
+POST {{ApiBaseUrl}}{{CompaniesSection}}
+Content-Type: application/json
+
+{
+  "name": "Software Company",
+  "code": "SWCOMP",
+  "managerId": null
+}
+
+--- TEST
+await tp.Test("Response should contain generated identifier and match request data.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Software Company", (string)body.name);
+    Equal("SWCOMP", (string)body.code);
+    Null(body.managerId);
+
+    tp.SetVariable("CompanyId", (string)body.id, "companies");
+});
+
+--- END
+
+
+--- TESTCASE Create Company - Empty Name - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{CompaniesSection}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "code": "SWCOMP"
+}
+
+--- END
+
+
+--- TESTCASE Create Company - Empty Code - 400 Bad Request
+
+--- HTTP
+## TEST-EXPECT-STATUS: [400]
+POST {{ApiBaseUrl}}{{CompaniesSection}}
+Content-Type: application/json
+
+{
+  "name": "Software Company",
+  "code": ""
+}
+
+--- END
+
+
+--- TESTCASE Create Company - Nonexistent Manager - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+POST {{ApiBaseUrl}}{{CompaniesSection}}
+Content-Type: application/json
+
+{
+  "name": "Software Company",
+  "code": "SWCOMP",
+  "managerId": "00000000-0000-0000-0000-000000000001"
+}
+
+--- END

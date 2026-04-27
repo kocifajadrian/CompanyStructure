@@ -1,0 +1,29 @@
+--- TESTCASE Get Division By Id - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{DivisionsSection}}/{{DivisionId}}
+
+--- TEST
+await tp.Test("Response should match the previously created division.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Software Development", (string)body.name);
+    Equal("SWDEV", (string)body.code);
+    Equal(tp.GetVariable<string>("CompanyId", "companies"), (string)body.companyId);
+    Null(body.managerId);
+});
+
+--- END
+
+
+--- TESTCASE Get Division By Id - Nonexistent Division - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{DivisionsSection}}/00000000-0000-0000-0000-000000000001
+
+--- END

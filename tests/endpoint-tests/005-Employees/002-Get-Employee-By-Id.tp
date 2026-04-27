@@ -1,0 +1,31 @@
+--- TESTCASE Get Employee By Id - Success - 200 OK
+
+--- HTTP
+## TEST-EXPECT-STATUS: [200]
+## TEST-HAS-BODY
+GET {{ApiBaseUrl}}{{EmployeesSection}}/{{EmployeeId}}
+
+--- TEST
+await tp.Test("Response should match the previously created employee.", async () =>
+{
+    dynamic body = await tp.Response.GetBodyAsExpandoAsync();
+    NotNull(body);
+    NotNull(body.id);
+    Equal("Ing.", (string)body.title);
+    Equal("John", (string)body.firstName);
+    Equal("Doe", (string)body.lastName);
+    Equal("+421 123 456 789", (string)body.phone);
+    Equal("john.doe@example.com", (string)body.email);
+    Equal(tp.GetVariable<string>("CompanyId", "companies"), (string)body.companyId);
+});
+
+--- END
+
+
+--- TESTCASE Get Employee By Id - Nonexistent Employee - 404 Not Found
+
+--- HTTP
+## TEST-EXPECT-STATUS: [404]
+GET {{ApiBaseUrl}}{{EmployeesSection}}/00000000-0000-0000-0000-000000000001
+
+--- END
