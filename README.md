@@ -11,7 +11,7 @@ git clone https://github.com/kocifajadrian/CompanyStructure.git
 cd CompanyStructure
 ```
 
-Set your database connection string in `src/CompanyStructure.Api/appsettings.Development.json`:
+Set your database connection string in `src/CompanyStructure.Api/appsettings.Development.json` file.
 
 From the root directory execute:
 
