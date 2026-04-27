@@ -11,12 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyStructure.Infrastruc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyStructure.Domain", "src\CompanyStructure.Domain\CompanyStructure.Domain.csproj", "{378A31D1-7838-48C7-B832-D1580049AF43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyStructure.Api", "src\CompanyStructure.Api\CompanyStructure.Api.csproj", "{E2239293-6D26-4524-954C-984EAA44DE97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompanyStructure.Api", "src\CompanyStructure.Api\CompanyStructure.Api.csproj", "{E2239293-6D26-4524-954C-984EAA44DE97}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{864ED0CA-899B-43AA-BDCF-8ABF8D3DC9A9}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		README.md = README.md
+		run.bat = run.bat
 	EndProjectSection
 EndProject
 Global
