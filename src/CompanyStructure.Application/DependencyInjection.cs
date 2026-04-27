@@ -3,7 +3,9 @@ using CompanyStructure.Application.Features.Departments;
 using CompanyStructure.Application.Features.Divisions;
 using CompanyStructure.Application.Features.Employees;
 using CompanyStructure.Application.Features.Projects;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace CompanyStructure.Application
 {
@@ -16,6 +18,8 @@ namespace CompanyStructure.Application
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             return services;
         }

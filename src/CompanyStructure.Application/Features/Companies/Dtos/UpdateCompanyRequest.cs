@@ -2,8 +2,21 @@
 {
     public class UpdateCompanyRequest
     {
+        /// <summary>
+        /// The name of the company.
+        /// </summary>
+        /// <example>Software Company</example>
         public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The code of the company.
+        /// </summary>
+        /// <example>SWCOMP</example>
         public string Code { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The identifier of the company's manager.
+        /// </summary>
         public Guid? ManagerId { get; set; }
     }
 }
